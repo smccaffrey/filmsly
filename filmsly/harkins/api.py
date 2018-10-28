@@ -3,12 +3,14 @@ import requests
 from bs4 import BeautifulSoup
 
 from .config.info import harkins_crawling_info as HCI
+from ..progress import progressBar
 
 class harkins_api:
 
 	def __init__(self):
 		"""Harkins Theatre Information API
 		"""
+		self._progress = progressBar()
 		return
 
 	def _get_showtimes(self, url: str) -> dict:
@@ -30,13 +32,20 @@ class harkins_api:
 		r = requests.get(url)
 		soup = BeautifulSoup(r.text, 'html.parser')
 		regions = soup.find_all(HCI.REGIONS_TAG, {'class' : HCI.REGIONS_CLASS})
+		region_cnt = len(regions)
 		results = {}
 		index = 0
-		for region_index in range(len(regions)):
+		for region_index in range(region_cnt):
 			region_nm = regions[region_index].find(HCI.REGION_TAG, {'class' : HCI.REGION_CLASS}).text
 			theatres = regions[region_index].find_all(HCI.THEATRES_TAG, {'class' : HCI.THEATRES_CLASS})
-			for theatre_index in range(len(theatres)):
-				print('Gathering Data for Theatre {}/{}'.format(theatre_index, len(theatres)))
+			theatre_cnt = len(theatres)
+			#self._progress.printProgressBar(0, theatre_cnt, suffix = 'Complete', length = 50)
+			#self._progress.otherProgressBar(region_index, total = region_cnt, label = 'Harkins')
+
+			for theatre_index in range(theatre_cnt):
+				#print('Gathering Data for Theatre {}/{}'.format(theatre_index, len(theatres)))
+				#self._progress.printProgressBar(theatre_index, theatre_cnt, prefix = 'Harkins', suffix = 'Complete', length = 50)
+				self._progress.otherProgressBar(theatre_index, total = theatre_cnt, label = 'Harkins - {}'.format(region_nm))
 				info = theatres[theatre_index].find(HCI.THEATRE_TAG, {'class' : HCI.THEATRE_CLASS})
 				name = info.text.strip()
 				showtimes_link = HCI.ROOT_URL + info.find('a')['href']
@@ -50,12 +59,11 @@ class harkins_api:
 				results[name]['showtimes_link'] = showtimes_link
 				results[name]['showtimes'] = self._get_showtimes(showtimes_link)
 				index += 1
-		#print(results)
+				
 		return results
 
 if __name__ =='__main__':
 	print('Running Tests on {}'.format(__name__))
-
 
 	TEST_THEATRE = "https://www.harkins.com/locations"
 	TEST_ROOT = "https://www.harkins.com"
