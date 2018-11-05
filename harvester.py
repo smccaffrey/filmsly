@@ -2,8 +2,9 @@ import requests
 
 from bs4 import BeautifulSoup
 
-from filmsly.harkins.api import harkins_api
-from filmsly.amc.api import amc_api
+from filmsly.theatres.harkins.parser import harkins_api
+from filmsly.theatres.amc.parser import amc_api
+#from filmsly.theatres.progress import progressBar
 
 if __name__ == '__main__':
 

@@ -2,8 +2,10 @@ import requests
 
 from bs4 import BeautifulSoup
 
-from .config.info import harkins_crawling_info as HCI
-from ..progress import progressBar
+from .info import harkins_crawling_info as HCI
+from ..amc.info import amc_crawling_info
+
+from ...library.progress import progressBar
 
 class harkins_api:
 
