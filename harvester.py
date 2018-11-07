@@ -6,7 +6,12 @@ from filmsly.theatres.harkins.parser import harkins_api
 from filmsly.theatres.amc.parser import amc_api
 #from filmsly.theatres.progress import progressBar
 
+from filmsly.api import filmsly_api
+
 if __name__ == '__main__':
+
+	_test = filmsly_api()
+	_test.get_theatres()
 
 	### Harkins
 	#current_harkins_data = harkins_api().get_theatre_info("https://www.harkins.com/locations")

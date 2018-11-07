@@ -2,8 +2,8 @@ import requests
 
 from bs4 import BeautifulSoup
 
-from .info import harkins_crawling_info as HCI
-from ..amc.info import amc_crawling_info
+#from .info import harkins_crawling_info as HCI
+#from ..amc.info import amc_crawling_info
 
 from ...library.progress import progressBar
 
@@ -33,13 +33,13 @@ class harkins_api:
 		"""
 		r = requests.get(url)
 		soup = BeautifulSoup(r.text, 'html.parser')
-		regions = soup.find_all(HCI.REGIONS_TAG, {'class' : HCI.REGIONS_CLASS})
+		regions = soup.find_all('div', {'class' : 'region'})
 		region_cnt = len(regions)
 		results = {}
 		index = 0
 		for region_index in range(region_cnt):
-			region_nm = regions[region_index].find(HCI.REGION_TAG, {'class' : HCI.REGION_CLASS}).text
-			theatres = regions[region_index].find_all(HCI.THEATRES_TAG, {'class' : HCI.THEATRES_CLASS})
+			region_nm = regions[region_index].find('h3', {'class' : 'underlined'}).text
+			theatres = regions[region_index].find_all('div', {'class' : 'details col-5/8 shift5-full'})
 			theatre_cnt = len(theatres)
 			#self._progress.printProgressBar(0, theatre_cnt, suffix = 'Complete', length = 50)
 			#self._progress.otherProgressBar(region_index, total = region_cnt, label = 'Harkins')
@@ -48,9 +48,9 @@ class harkins_api:
 				#print('Gathering Data for Theatre {}/{}'.format(theatre_index, len(theatres)))
 				#self._progress.printProgressBar(theatre_index, theatre_cnt, prefix = 'Harkins', suffix = 'Complete', length = 50)
 				self._progress.otherProgressBar(theatre_index, total = theatre_cnt, label = 'Harkins - {}'.format(region_nm))
-				info = theatres[theatre_index].find(HCI.THEATRE_TAG, {'class' : HCI.THEATRE_CLASS})
+				info = theatres[theatre_index].find('h4', {'class' : 'underlined tooltip-trigger'})
 				name = info.text.strip()
-				showtimes_link = HCI.ROOT_URL + info.find('a')['href']
+				showtimes_link = 'https://www.harkins.com' + info.find('a')['href']
 				address = theatres[theatre_index].find('div', {'class' : 'address'}).text.strip()
 				phone = theatres[theatre_index].find('div', {'class' : 'phone'}).text.strip()
 				results[name] = {}
