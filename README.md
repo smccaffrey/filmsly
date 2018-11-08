@@ -7,12 +7,13 @@ Do you love movies? Do you love using awesome apps like Fandango and atomtickets
 
 ```sh
 $ pip install filmsly
-$
-$ from filmsly.api import filmsly_api
-$
-$ _test = filmsly_api()
-$ print(_test.list_of_theatres())
-$ re = _test.get_theatres()
+```
+```py
+from filmsly.api import filmsly_api
+
+_test = filmsly_api()
+print(_test.list_of_theatres())
+re = _test.get_theatres()
 ```
 
 ### Theatres Supported
