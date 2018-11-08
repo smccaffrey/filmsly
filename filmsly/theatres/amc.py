@@ -3,9 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-#from info import amc_crawling_info as ACI
-
-from ...library.progress import progressBar
+from ..library.progress import progressBar
 
 class amc_api:
 
