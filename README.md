@@ -18,9 +18,9 @@ re = _test.get_theatres()
 
 ### Theatres Supported
 
-Dillinger is currently extended with the following plugins. Instructions on how to use them in your own application are linked below.
+Filmsly is currently capable of harvesting data from the following theatre chains.
 
-| Theatre | Parser Status |
+| Theatre | Parser State |
 | ------ | ------ |
 | Harkins | PASSED |
 | AMC | PASSED |
