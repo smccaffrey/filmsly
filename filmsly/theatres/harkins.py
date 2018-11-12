@@ -6,13 +6,21 @@ from ..library.progress import progressBar
 
 class harkins_api:
 
-	def __init__(self):
+	def __init__(self, chain):
 		"""Harkins Theatre Information API
 		"""
+		self.root_url = "https://www.harkins.com/locations"
 		self._progress = progressBar()
+		self.results = {}
+		self.results['theatre_chain'] = chain
+		self.results['theatres'] = {}
 		return
 
-	def _get_showtimes(self, url: str) -> dict:
+	def theatre_info(self):
+
+		return self.results
+
+	def get_showtimes(self, url: str) -> dict:
 		re = requests.get(url)
 		soup = BeautifulSoup(re.text, 'html.parser')
 		movies = soup.find_all('li', {'class' : 'ease-in-up'})
@@ -25,10 +33,10 @@ class harkins_api:
 			#print(name, times)
 		return results
 
-	def get_theatre_info(self, url: str) -> dict:
+	def get_theatre_info(self) -> dict:
 		"""Gather's all theatre information for the targeted theatre
 		"""
-		r = requests.get(url)
+		r = requests.get(self.root_url)
 		soup = BeautifulSoup(r.text, 'html.parser')
 		regions = soup.find_all('div', {'class' : 'region'})
 		region_cnt = len(regions)
@@ -38,28 +46,24 @@ class harkins_api:
 			region_nm = regions[region_index].find('h3', {'class' : 'underlined'}).text
 			theatres = regions[region_index].find_all('div', {'class' : 'details col-5/8 shift5-full'})
 			theatre_cnt = len(theatres)
-			#self._progress.printProgressBar(0, theatre_cnt, suffix = 'Complete', length = 50)
-			#self._progress.otherProgressBar(region_index, total = region_cnt, label = 'Harkins')
-
 			for theatre_index in range(theatre_cnt):
-				#print('Gathering Data for Theatre {}/{}'.format(theatre_index, len(theatres)))
-				#self._progress.printProgressBar(theatre_index, theatre_cnt, prefix = 'Harkins', suffix = 'Complete', length = 50)
 				self._progress.otherProgressBar(theatre_index, total = theatre_cnt, label = 'Harkins - {}'.format(region_nm))
 				info = theatres[theatre_index].find('h4', {'class' : 'underlined tooltip-trigger'})
 				name = info.text.strip()
 				showtimes_link = 'https://www.harkins.com' + info.find('a')['href']
 				address = theatres[theatre_index].find('div', {'class' : 'address'}).text.strip()
 				phone = theatres[theatre_index].find('div', {'class' : 'phone'}).text.strip()
-				results[name] = {}
-				results[name]['index'] = index
-				results[name]['region'] = region_nm
-				results[name]['address'] = address
-				results[name]['phone'] = phone
-				results[name]['showtimes_link'] = showtimes_link
-				results[name]['showtimes'] = self._get_showtimes(showtimes_link)
+				self.results['theatres'][name] = {}
+				self.results['theatres'][name]['address'] = address
+				self.results['theatres'][name]['city'] = region_nm
+				self.results['theatres'][name]['state'] = ""
+				self.results['theatres'][name]['zip'] = ""
+				self.results['theatres'][name]['phone'] = phone
+				self.results['theatres'][name]['theatre_url'] = showtimes_link
+				self.results['theatres'][name]['theatre_showtimes'] = self.get_showtimes(showtimes_link)
 				index += 1
 				
-		return results
+		return self.results
 
 if __name__ =='__main__':
 	print('Running Tests on {}'.format(__name__))
@@ -69,13 +73,13 @@ if __name__ =='__main__':
 	TEST_TIMES = "https://www.harkins.com/locations/moreno-valley-16"
 
 	print('Testing get_theatre_info')
-	if harkins_api().get_theatre_info(TEST_THEATRE):
+	if harkins_api(chain = 'harkins').get_theatre_info(TEST_THEATRE):
 		print('Test Passed!')
 	else:
 		print('Test Failed!')
 
-	print('Testing _get_showtimes')
-	if harkins_api()._get_showtimes(TEST_TIMES):
+	print('Testing get_showtimes')
+	if harkins_api(chain = 'harkins').get_showtimes(TEST_TIMES):
 		print('Test Passed!')
 	else:
 		print('Test Failed')
