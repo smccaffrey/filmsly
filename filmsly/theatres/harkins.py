@@ -13,6 +13,7 @@ class harkins_api:
 		self._progress = progressBar()
 		self.results = {}
 		self.results['theatre_chain'] = chain
+		self.results['theatre_chain_url'] = self.root_url
 		self.results['theatres'] = {}
 		return
 
@@ -59,8 +60,9 @@ class harkins_api:
 				self.results['theatres'][name]['state'] = ""
 				self.results['theatres'][name]['zip'] = ""
 				self.results['theatres'][name]['phone'] = phone
-				self.results['theatres'][name]['theatre_url'] = showtimes_link
+				self.results['theatres'][name]['theatre_location_url'] = showtimes_link
 				self.results['theatres'][name]['theatre_showtimes'] = self.get_showtimes(showtimes_link)
+				self.results['theatres'][name]['showtimes_url_location'] = showtimes_link
 				index += 1
 				
 		return self.results

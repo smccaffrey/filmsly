@@ -14,6 +14,7 @@ class amc_api:
 		self.timestamp = datetime.today().strftime('%Y-%m-%d')
 		self.results = {}
 		self.results['theatre_chain'] = chain
+		self.results['theatre_chain_url'] = self.root_url_locations
 		#self.results['theatres'] = {}
 		return
 
@@ -57,8 +58,9 @@ class amc_api:
 				results[name]['city'] = city
 				results[name]['state'] = ""
 				results[name]['zip'] = ""
-				results[name]['showtime_link'] = self.root_url + showtime_link + '/showtimes/all/' + self.timestamp + '/' + showtime_link.split('/')[3] + '/all'
-				results[name]['showtimes'] = self._gather_showtime_info(results[name]['showtime_link'])
+				results[name]['showtimes_url_location'] = self.root_url + showtime_link + '/showtimes/all/' + self.timestamp + '/' + showtime_link.split('/')[3] + '/all'
+				results[name]['theatre_location_url'] = self.root_url + showtime_link + '/showtimes/all/' + self.timestamp + '/' + showtime_link.split('/')[3] + '/all'
+				results[name]['theatre_showtimes'] = self._gather_showtime_info(results[name]['showtime_link'])
 				#print(results[name]['showtime_link'])
 				#"https://www.amctheatres.com/movie-theatres/atlanta/amc-camp-creek-14/showtimes/all/2018-10-28/amc-camp-creek-14/all"
 		#print(results)

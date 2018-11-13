@@ -2,18 +2,19 @@
 ## Author: Sam McCaffrey
 ##
 ##
+##
+##
+##
 
 import os
 import sys
 
-#from filmsly.theatres.amc import amc_api
-#from filmsly.theatres.harkins import harkins_api
-
-#import filmsly
+from datetime import datetime
 
 from filmsly import theatres
 
 from .search import search
+from .databases import sqllite
 
 class filmsly_api:
 
@@ -38,6 +39,43 @@ class filmsly_api:
 
 	def index_all_theatres(self):
 		return
+
+
+	def _parse_parser_outputs(self, data: dict) -> tuple:
+		"""Flattens parser outputs into a single list of tuples
+		"""
+		results = []
+		chain_name = data['theatre_chain']
+		chain_url = data['theatre_chain_url']
+		#(theatre_chain_name,theatre_chain_url,theatre_location_name, \
+		#theatre_location_url,movie_name,movie_showtimes_url_location,record_date)
+		for theatre in data['theatres'].keys():
+			for movie in data['theatres'][theatre]['theatre_showtimes'].keys():
+				theatre_location_name = theatre
+				theatre_location_url = data['theatres'][theatre]['theatre_location_url']
+				movie_name = movie
+				movie_showtimes_url_location = data['theatres'][theatre]['showtimes_url_location']
+				now = datetime.now()
+				record_date = now.strftime('%Y-%m-%dT%H')
+
+				row = (chain_name,chain_url,theatre_location_name,theatre_location_url,movie_name,movie_showtimes_url_location,record_date)
+				results.append(row)
+		return results
+
+	def index_theatre(self, theatre_name):
+		resolve = search(param = theatre_name).resolve_theatre_paramter()
+		_obj = filmsly_api()
+		theatre_data = _obj.get_theatre_info(theatre = resolve)
+		tupled_data = self._parse_parser_outputs(data = theatre_data)
+
+		init_db = sqllite()
+
+		for x in tupled_data:
+			init_db.insert_index_record(data = x)
+
+		init_db.close_and_commit()
+		return
+
 
 	def get_showtime(self, movie):
 		""" Requires theatre_chain_index to exist
