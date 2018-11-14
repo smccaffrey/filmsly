@@ -21,7 +21,7 @@ class harkins_api:
 
 		return self.results
 
-	def get_showtimes(self, url: str) -> dict:
+	def _get_showtimes(self, url: str) -> dict:
 		re = requests.get(url)
 		soup = BeautifulSoup(re.text, 'html.parser')
 		movies = soup.find_all('li', {'class' : 'ease-in-up'})
@@ -36,6 +36,25 @@ class harkins_api:
 
 	def get_theatre_info(self) -> dict:
 		"""Gather's all theatre information for the targeted theatre
+		"""
+
+		"""
+		{	'theatre_chain' : 'harkins',
+			'theatre_chain_url': "https://www.harkins.com/locations",
+			'theatres' : {
+				'Tempe Marketplace 16' : {
+					'addrress' : '123 Main St.',
+					'city' : 'Tempe',
+					'state' : 'AZ',
+					'zip' : '85266',
+					'phone' : '480-123-4567'
+					'theatre_location_url' : <url>
+					'showtimes_location_url' : <url>,
+					'theatre_showtimes' : ['1:00PM', '2:00PM', '3:00PM']
+				}
+			}
+	
+		}
 		"""
 		r = requests.get(self.root_url)
 		soup = BeautifulSoup(r.text, 'html.parser')
@@ -61,8 +80,8 @@ class harkins_api:
 				self.results['theatres'][name]['zip'] = ""
 				self.results['theatres'][name]['phone'] = phone
 				self.results['theatres'][name]['theatre_location_url'] = showtimes_link
-				self.results['theatres'][name]['theatre_showtimes'] = self.get_showtimes(showtimes_link)
-				self.results['theatres'][name]['showtimes_url_location'] = showtimes_link
+				self.results['theatres'][name]['theatre_showtimes'] = self._get_showtimes(showtimes_link)
+				self.results['theatres'][name]['showtimes_location_url'] = showtimes_link
 				index += 1
 				
 		return self.results

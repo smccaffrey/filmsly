@@ -1,10 +1,6 @@
 ##
 ## Author: Sam McCaffrey
 ##
-##
-##
-##
-##
 
 import os
 import sys
@@ -34,45 +30,41 @@ class filmsly_api:
 			return _theatre_obj.get_theatre_info()
 		print('Gathering all information for {} \nThis could take awhile.'.format(self.list_of_theatres()))
 
-	def get_showtime(self):
-		return
-
-	def index_all_theatres(self):
-		return
-
-
 	def _parse_parser_outputs(self, data: dict) -> tuple:
 		"""Flattens parser outputs into a single list of tuples
+		(theatre_chain_name,theatre_chain_url,theatre_location_name, \
+		theatre_location_url,movie_name,movie_showtimes_url_location,record_date)
 		"""
 		results = []
 		chain_name = data['theatre_chain']
 		chain_url = data['theatre_chain_url']
-		#(theatre_chain_name,theatre_chain_url,theatre_location_name, \
-		#theatre_location_url,movie_name,movie_showtimes_url_location,record_date)
+
 		for theatre in data['theatres'].keys():
 			for movie in data['theatres'][theatre]['theatre_showtimes'].keys():
 				theatre_location_name = theatre
 				theatre_location_url = data['theatres'][theatre]['theatre_location_url']
 				movie_name = movie
-				movie_showtimes_url_location = data['theatres'][theatre]['showtimes_url_location']
+				movie_showtimes_url_location = data['theatres'][theatre]['showtimes_location_url']
 				now = datetime.now()
-				record_date = now.strftime('%Y-%m-%dT%H')
-
+				record_date = now.strftime('%Y-%m-%d:%H')
 				row = (chain_name,chain_url,theatre_location_name,theatre_location_url,movie_name,movie_showtimes_url_location,record_date)
 				results.append(row)
 		return results
+
+	def index_all_theatres(self):
+		return
 
 	def index_theatre(self, theatre_name):
 		resolve = search(param = theatre_name).resolve_theatre_paramter()
 		_obj = filmsly_api()
 		theatre_data = _obj.get_theatre_info(theatre = resolve)
 		tupled_data = self._parse_parser_outputs(data = theatre_data)
-
 		init_db = sqllite()
 
+		### Delete old data corsponding to theatre name
+		init_db.delete_theatre_records(theatre_name = resolve)
 		for x in tupled_data:
 			init_db.insert_index_record(data = x)
-
 		init_db.close_and_commit()
 		return
 

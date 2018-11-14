@@ -23,7 +23,7 @@ class sqllite(object):
 	def __init__ (self, name = 'theatre_search_index.db'):
 		self.data_dir = os.path.join(os.path.dirname(__file__), 'data')
 		self.db_path = os.path.join(os.path.join(os.path.dirname(__file__), 'data'), name)
-		print(os.path.isfile(self.db_path))
+		#print(os.path.isfile(self.db_path))
 
 		if os.path.isfile(self.db_path): # if db exists create connection object
 			self.conn_obj = sqlite3.connect('{}'.format(self.db_path))
@@ -38,7 +38,7 @@ class sqllite(object):
 		return
 
 	def query(self, q):
-		return self.cur_obj.execute(q)
+		return self.cur_obj.execute(q).fetchall()
 
 	def insert_index_record(self, data: tuple) -> str:
 		_query = '''INSERT INTO theatre_search_index(theatre_chain_name,theatre_chain_url,theatre_location_name, \
@@ -58,6 +58,10 @@ class sqllite(object):
 		"""Creates the theatre_search_index table
 		"""
 		return self.cur_obj.execute(index_table_payload)
+
+	def delete_theatre_records(self, theatre_name):
+		q = '''DELETE FROM theatre_search_index WHERE theatre_chain_name LIKE '%{}%' '''.format(theatre_name)
+		return self.cur_obj.execute(q)
 
 	def close_and_commit(self):
 		self.conn_obj.commit()
