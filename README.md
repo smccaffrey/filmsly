@@ -3,18 +3,18 @@
 
 [![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
 
-Do you love movies? Do you love using awesome apps like Fandango(https://www.fandango.com/) and AtomTickets(https://www.atomtickets.com/) for looking up showtimes? If yes, then you'll love this needlessly complicated way of finding that perfect showtime for Avengers 8.
+Do you love movies? Do you love using awesome apps like [Fandango](https://www.fandango.com/) and [AtomTickets](https://www.atomtickets.com/) for looking up showtimes? If yes, then you'll love this needlessly complicated way of finding that perfect showtime for Avengers 8.
 
 ### Features
-* Find theare locations and information
-* Find movies and showtimes
+* Finds theare locations and information
+* Finds movies and showtimes
 * Automatically creates an offline indexing database during the first run, because scaping takes too long!
 * Worried about theatre and movie name variations? Don't worry, every parameter is fuzzy matched for validation
 
 ### Installation
 
 ```sh
-$ pip install filmsly --user
+$ pip3 install filmsly --user
 ```
 The `--user` is because the api class creates an indexing database to make your life easier
 ```py
