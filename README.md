@@ -30,7 +30,7 @@ filmsly_object = filmsly_api()
 # Print a list parser mapped theatres
 filmsly_object.list_of_theatres()
 
-# Index a specific theatre (every)
+# Index a specific theatre
 filmsly_object.index_theatre(theatre_name = 'HaRkIn') 
 
 ```
