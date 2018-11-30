@@ -31,7 +31,10 @@ filmsly_object = filmsly_api()
 filmsly_object.list_of_theatres()
 
 # Index a specific theatre
-filmsly_object.index_theatre(theatre_name = 'HaRkIn') 
+filmsly_object.index_theatre(theatre_name = 'HaRkIn')
+
+# Index all theatres
+filmsly_object.index_all_theatres()
 
 ```
 
