@@ -17,6 +17,9 @@ class filmsly_api:
 	def __init__(self):
 		return
 
+	def get_showtime(self, movie, theatre=None):
+		return
+
 	def list_of_theatres(self):
 		_dir = os.path.join(os.path.dirname(__file__), 'theatres')
 		return [f.split('.')[0] for f in os.listdir(_dir) if f.endswith('.py') and not f.startswith('__init__')]
@@ -52,6 +55,21 @@ class filmsly_api:
 		return results
 
 	def index_all_theatres(self):
+		print('\n Rebuilding Entire Index!\n\n Grab some coffee!')
+		### Iterate through all theatre names
+		### Call each crawler
+		### Pass each results to results parser
+		### write each result to database
+		for theatre_chain in self.list_of_theatres():
+			_temp_obj = filmsly_api()
+			theatre_data = _temp_obj.get_theatre_info(theatre = theatre_chain)
+			tupled_data = self._parse_parser_outputs(data = theatre_data)
+			init_db = sqllite()
+			### Delete old data corsponding to theatre name
+			init_db.delete_theatre_records(theatre_name = theatre_chain)
+			for x in tupled_data:
+				init_db.insert_index_record(data = x)
+			init_db.close_and_commit()
 		return
 
 	def index_theatre(self, theatre_name):

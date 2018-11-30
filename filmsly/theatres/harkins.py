@@ -66,8 +66,9 @@ class harkins_api:
 			region_nm = regions[region_index].find('h3', {'class' : 'underlined'}).text
 			theatres = regions[region_index].find_all('div', {'class' : 'details col-5/8 shift5-full'})
 			theatre_cnt = len(theatres)
+			self._progress.printProgressBar(region_index, total = region_cnt, label = 'Harkins - {}'.format(region_nm))
 			for theatre_index in range(theatre_cnt):
-				self._progress.otherProgressBar(theatre_index, total = theatre_cnt, label = 'Harkins - {}'.format(region_nm))
+				#self._progress.printProgressBar(theatre_index, total = theatre_cnt, label = 'Harkins - {}'.format(region_nm))
 				info = theatres[theatre_index].find('h4', {'class' : 'underlined tooltip-trigger'})
 				name = info.text.strip()
 				showtimes_link = 'https://www.harkins.com' + info.find('a')['href']

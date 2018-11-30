@@ -41,7 +41,7 @@ class amc_api:
 		results = {}
 		for city,url in theatres_info_list:
 
-			self._progress.otherProgressBar(i, total = len(theatres_info_list), label = 'AMC: ', end_label = city)
+			self._progress.printProgressBar(i, total = len(theatres_info_list), label = 'AMC: ', end_label = city)
 			i += 1
 
 			re = requests.get(url)
@@ -60,7 +60,7 @@ class amc_api:
 				results[name]['zip'] = ""
 				results[name]['showtimes_location_url'] = self.root_url + showtime_link + '/showtimes/all/' + self.timestamp + '/' + showtime_link.split('/')[3] + '/all'
 				results[name]['theatre_location_url'] = self.root_url + showtime_link + '/showtimes/all/' + self.timestamp + '/' + showtime_link.split('/')[3] + '/all'
-				results[name]['theatre_showtimes'] = self._gather_showtime_info(results[name]['showtime_link'])
+				results[name]['theatre_showtimes'] = self._gather_showtime_info(results[name]['showtimes_location_url'])
 				#print(results[name]['showtime_link'])
 				#"https://www.amctheatres.com/movie-theatres/atlanta/amc-camp-creek-14/showtimes/all/2018-10-28/amc-camp-creek-14/all"
 		#print(results)
@@ -73,11 +73,7 @@ class amc_api:
 		#results['theatre_chain'] = self.chain
 		cities_raw = soup.find('ul', {'class' : 'u-listUnstyled LinkList'})
 		cities = [[x.text, self.root_url + x.find('a')['href']] for x in cities_raw]
-		#i = 0
-		#for k,v in cities:
-		#self._progress.otherProgressBar(i, total = len(cities), label = 'AMC: ', end_label = k)
 		self.results['theatres'] = self._gather_theatre_info(theatres_info_list = cities)
-		#	i += 1
 		return self.results
 
 if __name__ == '__main__':
