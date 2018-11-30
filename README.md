@@ -1,9 +1,7 @@
 
 ![N|Solid](https://res.cloudinary.com/dzh5lsjmb/image/upload/v1541647602/large_films.ly.png)
 
-[![Python 3.6+](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
-
-[![PyPI version](https://badge.fury.io/py/filmsly.svg)](https://badge.fury.io/py/filmsly)
+[![Python 3.6+](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/) [![PyPI version](https://badge.fury.io/py/filmsly.svg)](https://badge.fury.io/py/filmsly)
 
 Do you love movies? Do you love using awesome apps like [Fandango](https://www.fandango.com/) and [AtomTickets](https://www.atomtickets.com/) for looking up showtimes? If yes, then you'll love this needlessly complicated way of finding that perfect showtime for Avengers 8.
 
