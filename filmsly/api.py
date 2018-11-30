@@ -87,9 +87,4 @@ class filmsly_api:
 		return
 
 
-	def get_showtime(self, movie):
-		""" Requires theatre_chain_index to exist
-		"""
-		return
-
 
