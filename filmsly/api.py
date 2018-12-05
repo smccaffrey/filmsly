@@ -17,8 +17,12 @@ class filmsly_api:
 	def __init__(self):
 		return
 
-	def get_showtime(self, movie, theatre=None):
-		return
+	def get_showtime(self, title, theatre=None):
+		init_db = sqllite()
+		#_query = '''SELECT * FROM theatre_search_index WHERE movie_name LIKE ?'''
+		results = init_db.search_movie(movie = title)
+		init_db.close_and_commit()
+		return results
 
 	def list_of_theatres(self):
 		_dir = os.path.join(os.path.dirname(__file__), 'theatres')

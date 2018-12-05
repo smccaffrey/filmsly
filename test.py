@@ -11,8 +11,10 @@ from filmsly.api import filmsly_api
 if __name__ == '__main__':
 
 	_test = filmsly_api()
-	print(_test.list_of_theatres())
+	#print(_test.list_of_theatres())
 	_test.index_all_theatres()
+	#x = _test.get_showtime(title = 'star is born')
+	#print(x)
 
 	### Harkins
 	#current_harkins_data = harkins_api().get_theatre_info("https://www.harkins.com/locations")

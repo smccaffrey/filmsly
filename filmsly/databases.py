@@ -40,6 +40,14 @@ class sqllite(object):
 	def query(self, q):
 		return self.cur_obj.execute(q).fetchall()
 
+	def search_movie(self, movie):
+		results = {}
+		num_of_results = "SELECT COUNT(*) FROM theatre_search_index WHERE movie_name LIKE '{}';".format('%{}%'.format(movie))
+		full_results = "SELECT * FROM theatre_search_index WHERE movie_name LIKE '{}';".format('%{}%'.format(movie))
+		results['number_of_results'] = [x[0] for x in self.cur_obj.execute(num_of_results).fetchall()][0]
+		results['full_results'] = self.cur_obj.execute(full_results).fetchall()
+		return results
+
 	def insert_index_record(self, data: tuple) -> str:
 		_query = '''INSERT INTO theatre_search_index(theatre_chain_name,theatre_chain_url,theatre_location_name, \
 		theatre_location_url,movie_name,movie_showtimes_url_location,record_date) \
