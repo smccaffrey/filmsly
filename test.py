@@ -12,7 +12,9 @@ if __name__ == '__main__':
 
 	_test = filmsly_api()
 	#print(_test.list_of_theatres())
-	_test.index_all_theatres()
+	#_test.index_all_theatres()
+
+	_test.index_theatre(theatre_name = 'HaRkIn')
 	#x = _test.get_showtime(title = 'star is born')
 	#print(x)
 
